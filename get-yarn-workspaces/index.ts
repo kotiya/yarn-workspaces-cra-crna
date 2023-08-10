@@ -6,26 +6,26 @@ const glob = require('glob');
 
 // as per https://yarnpkg.com/blog/2018/02/15/nohoist/ -
 // "workspaces" can be an array or an object that contains "packages"
-function getPackages(packageJson) {
+function getPackages(packageJson: any): string[] | null {
   if (!('workspaces' in packageJson)) {
     return null;
   }
-  const {workspaces} = packageJson;
+  const { workspaces } = packageJson;
   if (Array.isArray(workspaces)) {
     return workspaces;
   }
   return workspaces.packages || null;
 }
 
-module.exports = function getWorkspaces(from) {
-  const root = findRoot(from, dir => {
+module.exports = function getWorkspaces(from: string): string[] {
+  const root = findRoot(from, (dir: string) => {
     const pkg = path.join(dir, 'package.json');
     return fs.existsSync(pkg) && getPackages(require(pkg)) !== null;
   });
 
   const packages = getPackages(require(path.join(root, 'package.json')));
   return flatten(
-    packages.map(name =>
+    packages.map((name: string) =>
       // The trailing / ensures only dirs are picked up
       glob.sync(path.join(root, `${name}/`))
     )

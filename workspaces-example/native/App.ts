@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import test from 'core/test';
-import Test from 'views/Test.view.js';
+import Test from 'views/Test.view';
 
 alert(test);
 
